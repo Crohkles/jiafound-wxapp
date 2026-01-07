@@ -136,7 +136,7 @@ const handleLoginSuccess = () => {
   }
 
   // 判断是否已实名认证
-  if (!userInfo.is_certified) {
+  if (!userInfo.isCertified) {
     // 未认证，跳转到实名认证页面
     uni.showModal({
       title: '温馨提示',

@@ -108,13 +108,13 @@
 
       <view v-else class="log-list">
         <view
-          v-for="log in logs"
-          :key="log.log_id"
+          v-for="log in logs.slice(0, 5)"
+          :key="log.logId"
           class="log-item"
         >
           <view class="log-left">
             <text class="log-type">{{ getTypeName(log.type) }}</text>
-            <text class="log-time">{{ formatTime(log.create_time) }}</text>
+            <text class="log-time">{{ formatTime(log.createTime) }}</text>
           </view>
           <text 
             class="log-amount"
@@ -188,13 +188,10 @@ const handleRecharge = async () => {
   try {
     recharging.value = true
 
-    // 调用充值接口
-    const res = await coinApi.recharge({
+    // 调用充值接口（后端已模拟，无返回余额）
+    await coinApi.recharge({
       amount: selectedAmount.value
     })
-
-    // 更新余额
-    userStore.updateBalance(res.data.coin_balance)
 
     // 模拟微信支付
     // 注意：实际开发中，后端应该返回支付参数（prepay_id等）
@@ -203,42 +200,16 @@ const handleRecharge = async () => {
       content: `确认支付 ${selectedAmount.value} 元充值赏币？`,
       success: async (modalRes) => {
         if (modalRes.confirm) {
-          // 发起微信支付
-          try {
-            await uni.requestPayment({
-              provider: 'wxpay',
-              timeStamp: String(Date.now()),
-              nonceStr: 'randomstring',
-              package: 'prepay_id=xxx', // 实际应从后端获取
-              signType: 'MD5',
-              paySign: 'xxx' // 实际应从后端获取
-            })
+          // 后端已模拟支付，这里直接视为成功，无需调起微信收银台
+          uni.showToast({
+            title: '充值成功',
+            icon: 'success'
+          })
 
-            // 支付成功
-            uni.showToast({
-              title: '充值成功',
-              icon: 'success'
-            })
-
-            // 刷新数据
-            await userStore.refreshUserInfo()
-            await fetchLogs()
-            selectedAmount.value = null
-          } catch (payError: any) {
-            console.error('支付失败:', payError)
-            
-            if (payError.errMsg && payError.errMsg.includes('cancel')) {
-              uni.showToast({
-                title: '已取消支付',
-                icon: 'none'
-              })
-            } else {
-              uni.showToast({
-                title: '支付失败，请重试',
-                icon: 'none'
-              })
-            }
-          }
+          // 刷新数据
+          await userStore.refreshUserInfo()
+          await fetchLogs()
+          selectedAmount.value = null
         }
       }
     })
@@ -298,13 +269,10 @@ const handleWithdraw = async () => {
         try {
           withdrawing.value = true
 
-          // 调用提现接口
-          const result = await coinApi.withdraw({
+          // 调用提现接口（后端已模拟，无返回余额）
+          await coinApi.withdraw({
             coinAmount: withdrawAmount.value!
           })
-
-          // 更新余额
-          userStore.updateBalance(result.data.coin_balance)
 
           uni.showToast({
             title: '提现成功',
@@ -330,10 +298,8 @@ const handleWithdraw = async () => {
  * 查看更多流水
  */
 const handleViewMore = () => {
-  // 可以跳转到流水详情页，或者在当前页展开
-  uni.showToast({
-    title: '流水详情页开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/user/wallet/logs'
   })
 }
 
@@ -342,11 +308,18 @@ const handleViewMore = () => {
  */
 const getTypeName = (type: string): string => {
   const typeMap: Record<string, string> = {
+    'RECHARGE': '充值',
+    'WITHDRAW': '提现',
+    'FREEZE': '冻结',
+    'REWARD': '悬赏支出',
+    'SETTLE': '结算收入',
+    'UNFREEZE': '解冻',
+    // 兼容旧格式
     'Recharge': '充值',
     'Withdraw': '提现',
     'Freeze': '冻结',
-    'Reward': '悬赏',
-    'Settle': '结算'
+    'Reward': '悬赏支出',
+    'Settle': '结算收入'
   }
   return typeMap[type] || type
 }
@@ -355,7 +328,12 @@ const getTypeName = (type: string): string => {
  * 时间格式化
  */
 const formatTime = (time: string): string => {
+  if (!time) return ''
+  
   const date = new Date(time)
+  // 检查日期是否有效
+  if (isNaN(date.getTime())) return time
+  
   const now = new Date()
   const diff = now.getTime() - date.getTime()
 

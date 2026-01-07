@@ -10,7 +10,7 @@
         <!-- 头像 -->
         <image 
           class="avatar" 
-          :src="userStore.userInfo?.avatar_url || '/static/default-avatar.png'" 
+          :src="userStore.userInfo?.avatarUrl || '/static/default-avatar.png'" 
           mode="aspectFill"
         ></image>
         
@@ -19,7 +19,7 @@
           <view class="name-row">
             <text class="nickname">{{ userStore.userInfo?.nickname || '未登录' }}</text>
             <!-- 认证标签 -->
-            <view v-if="userStore.userInfo?.is_certified" class="cert-badge">
+            <view v-if="userStore.userInfo?.isCertified" class="cert-badge">
               <text class="cert-icon">✓</text>
               <text class="cert-text">已认证</text>
             </view>
@@ -94,24 +94,6 @@
         </view>
         <text class="menu-arrow">›</text>
       </view>
-
-      <!-- 赏币流水 -->
-      <view class="menu-item" @click="handleNavigation('/pages/user/wallet/index')">
-        <view class="menu-left">
-          <text class="menu-icon">📊</text>
-          <text class="menu-text">赏币流水</text>
-        </view>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <!-- 联系客服 -->
-      <view class="menu-item" @click="handleContactService">
-        <view class="menu-left">
-          <text class="menu-icon">💬</text>
-          <text class="menu-text">联系客服</text>
-        </view>
-        <text class="menu-arrow">›</text>
-      </view>
     </view>
 
     <!-- 登录/退出登录按钮 -->
@@ -142,7 +124,7 @@ const userStore = useUserStore()
  * 例如：2021001234 -> 202****234
  */
 const maskStudentId = computed(() => {
-  const studentId = userStore.userInfo?.student_id || ''
+  const studentId = userStore.userInfo?.studentId || ''
   if (!studentId || studentId.length < 6) return studentId
   
   const start = studentId.substring(0, 3)
@@ -216,30 +198,6 @@ const handleNavigation = (url: string) => {
   }
 
   uni.navigateTo({ url })
-}
-
-/**
- * 联系客服
- */
-const handleContactService = () => {
-  uni.showModal({
-    title: '联系客服',
-    content: '客服微信：service001\n工作时间：9:00-18:00',
-    confirmText: '复制微信号',
-    success: (res) => {
-      if (res.confirm) {
-        uni.setClipboardData({
-          data: 'service001',
-          success: () => {
-            uni.showToast({
-              title: '微信号已复制',
-              icon: 'success'
-            })
-          }
-        })
-      }
-    }
-  })
 }
 
 /**

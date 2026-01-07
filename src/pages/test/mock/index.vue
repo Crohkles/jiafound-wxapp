@@ -20,13 +20,13 @@
     <view v-if="userStore.isLoggedIn" class="user-section">
       <view class="section-title">当前用户</view>
       <view class="user-card">
-        <image class="avatar" :src="userStore.userInfo?.avatar_url" mode="aspectFill"></image>
+        <image class="avatar" :src="userStore.userInfo?.avatarUrl" mode="aspectFill"></image>
         <view class="user-info">
           <text class="nickname">{{ userStore.userInfo?.nickname }}</text>
-          <text class="student-id">学号: {{ userStore.userInfo?.student_id || '未绑定' }}</text>
+          <text class="student-id">学号: {{ userStore.userInfo?.studentId || '未绑定' }}</text>
           <text class="balance">余额: {{ userStore.coinBalance }} 赏币</text>
           <view class="badges">
-            <text v-if="userStore.userInfo?.is_certified" class="badge cert">✓ 已认证</text>
+            <text v-if="userStore.userInfo?.isCertified" class="badge cert">✓ 已认证</text>
             <text v-if="userStore.isAdmin" class="badge admin">👑 管理员</text>
           </view>
         </view>

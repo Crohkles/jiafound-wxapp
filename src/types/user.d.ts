@@ -52,32 +52,32 @@ export interface User {
 
 /** 用户信息（前端精简版） */
 export interface UserInfo {
-  user_id: string
+  userId: string
   nickname: string
-  avatar_url: string
-  role_type: RoleType
-  is_certified: number
-  account_status: AccountStatus
-  coin_balance: number
-  frozen_balance: number
+  avatarUrl: string
+  roleType: RoleType
+  isCertified: boolean
+  accountStatus: AccountStatus
+  coinBalance: number
+  frozenBalance: number
+  studentId?: string
+  email?: string
 }
 
 // ============ 赏币流水相关 ============
 
 /** 赏币流水记录 */
 export interface CoinLog {
-  /** 流水ID (char32) */
-  log_id: string
-  /** 用户ID */
-  user_id: string
-  /** 金额（正数表示收入，负数表示支出） */
-  amount: number
+  /** 流水ID */
+  logId: string
   /** 流水类型 */
   type: CoinLogType
+  /** 金额（正数表示收入，负数表示支出） */
+  amount: number
   /** 关联物品ID（可选） */
-  related_item_id?: string
+  relatedItemId?: string
   /** 创建时间 */
-  create_time: string
+  createTime: string
 }
 
 // ============ API 响应结构 ============

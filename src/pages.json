@@ -71,16 +71,16 @@
 			}
 		},
 		
-		// ========== 测试页面 (仅开发环境) ==========
-		
-		// Mock 测试页
-		{
-			"path": "pages/test/mock/index",
-			"style": {
-				"navigationBarTitleText": "Mock 测试",
-				"navigationBarBackgroundColor": "#ffffff",
-				"navigationBarTextStyle": "black"
-			}
+	// 流水明细
+	{
+		"path": "pages/user/wallet/logs",
+		"style": {
+			"navigationBarTitleText": "流水明细",
+			"navigationBarBackgroundColor": "#ffffff",
+			"navigationBarTextStyle": "black"
+		}
+	},
+	
 		}
 	],
 	

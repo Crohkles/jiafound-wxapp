@@ -38,7 +38,7 @@
         </view>
         <input 
           class="item-input" 
-          :value="userStore.userInfo?.student_id || '未绑定'" 
+          :value="userStore.userInfo?.studentId || '未绑定'" 
           disabled
           placeholder="实名认证后不可修改"
         />
@@ -138,7 +138,7 @@ onMounted(() => {
   if (userStore.userInfo) {
     // 深拷贝用户信息
     formData.value = {
-      avatarUrl: userStore.userInfo.avatar_url || '',
+      avatarUrl: userStore.userInfo.avatarUrl || '',
       nickName: userStore.userInfo.nickname || '',
       email: userStore.userInfo.email || '',
       verifyCode: ''

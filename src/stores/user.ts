@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
      */
     isAdmin: (state): boolean => {
       if (!state.userInfo) return false
-      return state.userInfo.role_type === 'Admin' || state.userInfo.role_type === 'SuperAdmin'
+      return state.userInfo.roleType === 'Admin' || state.userInfo.roleType === 'SuperAdmin'
     },
 
     /**
@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', {
      */
     isSuperAdmin: (state): boolean => {
       if (!state.userInfo) return false
-      return state.userInfo.role_type === 'SuperAdmin'
+      return state.userInfo.roleType === 'SuperAdmin'
     },
 
     /**
@@ -51,21 +51,21 @@ export const useUserStore = defineStore('user', {
      */
     isFrozen: (state): boolean => {
       if (!state.userInfo) return false
-      return state.userInfo.account_status === 'Frozen'
+      return state.userInfo.accountStatus === 'Frozen'
     },
 
     /**
      * 获取用户赏币余额
      */
     coinBalance: (state): number => {
-      return state.userInfo?.coin_balance || 0
+      return state.userInfo?.coinBalance || 0
     },
 
     /**
      * 获取用户冻结余额
      */
     frozenBalance: (state): number => {
-      return state.userInfo?.frozen_balance || 0
+      return state.userInfo?.frozenBalance || 0
     }
   },
 
@@ -123,7 +123,7 @@ export const useUserStore = defineStore('user', {
      */
     updateBalance(newBalance: number): void {
       if (this.userInfo) {
-        this.userInfo.coin_balance = newBalance
+        this.userInfo.coinBalance = newBalance
       }
     },
 
@@ -133,7 +133,7 @@ export const useUserStore = defineStore('user', {
      */
     updateFrozenBalance(newFrozenBalance: number): void {
       if (this.userInfo) {
-        this.userInfo.frozen_balance = newFrozenBalance
+        this.userInfo.frozenBalance = newFrozenBalance
       }
     },
 

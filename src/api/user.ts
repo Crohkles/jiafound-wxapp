@@ -18,7 +18,6 @@ import type {
   PageResponse,
   UploadImageResponse
 } from '@/types/user'
-import { isMockEnabled, mockAuthApi, mockUserApi, mockCoinApi, mockUploadApi } from './user.mock'
 
 /**
  * 用户认证相关 API
@@ -38,9 +37,6 @@ export const authApi = {
    * ```
    */
   login(params: LoginParams): Promise<ApiResponse<LoginResponse>> {
-    if (isMockEnabled()) {
-      return mockAuthApi.login(params) as Promise<ApiResponse<LoginResponse>>
-    }
     return http.post<LoginResponse>('/user/login', params, {
       showLoading: true,
       loadingText: '登录中...'
@@ -63,9 +59,6 @@ export const authApi = {
    * ```
    */
   bind(params: BindParams): Promise<ApiResponse<void>> {
-    if (isMockEnabled()) {
-      return mockAuthApi.bind(params) as Promise<ApiResponse<void>>
-    }
     return http.post<void>('/user/bind', params, {
       showLoading: true,
       loadingText: '认证中...'
@@ -93,9 +86,6 @@ export const authApi = {
    * ```
    */
   sendCode(params: SendCodeParams): Promise<ApiResponse<void>> {
-    if (isMockEnabled()) {
-      return mockAuthApi.sendCode(params) as Promise<ApiResponse<void>>
-    }
     return http.post<void>('/auth/send-code', params, {
       showLoading: true,
       loadingText: '发送中...'
@@ -118,9 +108,6 @@ export const userApi = {
    * ```
    */
   getProfile(): Promise<ApiResponse<UserInfo>> {
-    if (isMockEnabled()) {
-      return mockUserApi.getProfile()
-    }
     return http.get<UserInfo>('/user/profile')
   },
 
@@ -148,10 +135,7 @@ export const userApi = {
    * ```
    */
   updateProfile(params: UpdateProfileParams): Promise<ApiResponse<UserInfo>> {
-    if (isMockEnabled()) {
-      return mockUserApi.updateProfile(params)
-    }
-    return http.put<UserInfo>('/user/profile/update', params, {
+    return http.put<UserInfo>('/user/profile', params, {
       showLoading: true,
       loadingText: '更新中...'
     })
@@ -165,19 +149,16 @@ export const coinApi = {
   /**
    * 充值赏币
    * @param params - 充值参数（金额仅限 1, 2, 5, 10）
-   * @returns 充值结果（包含新余额）
+  * @returns 充值结果（模拟接口，无返回余额）
    * 
    * @example
    * ```ts
    * const res = await coinApi.recharge({ amount: 10 })
-   * console.log(res.data.coin_balance) // 充值后的余额
+  * await userStore.refreshUserInfo() // 充值后刷新余额
    * ```
    */
-  recharge(params: RechargeParams): Promise<ApiResponse<{ coin_balance: number }>> {
-    if (isMockEnabled()) {
-      return mockCoinApi.recharge(params)
-    }
-    return http.post<{ coin_balance: number }>('/coin/recharge', params, {
+  recharge(params: RechargeParams): Promise<ApiResponse<void>> {
+    return http.post<void>('/coin/recharge', params, {
       showLoading: true,
       loadingText: '充值中...'
     })
@@ -186,19 +167,16 @@ export const coinApi = {
   /**
    * 提现赏币
    * @param params - 提现参数
-   * @returns 提现结果（包含新余额）
+  * @returns 提现结果（模拟接口，无返回余额）
    * 
    * @example
    * ```ts
    * const res = await coinApi.withdraw({ coinAmount: 50 })
-   * console.log(res.data.coin_balance) // 提现后的余额
+  * await userStore.refreshUserInfo() // 提现后刷新余额
    * ```
    */
-  withdraw(params: WithdrawParams): Promise<ApiResponse<{ coin_balance: number }>> {
-    if (isMockEnabled()) {
-      return mockCoinApi.withdraw(params)
-    }
-    return http.post<{ coin_balance: number }>('/coin/withdraw', params, {
+  withdraw(params: WithdrawParams): Promise<ApiResponse<void>> {
+    return http.post<void>('/coin/withdraw', params, {
       showLoading: true,
       loadingText: '提现中...'
     })
@@ -223,9 +201,6 @@ export const coinApi = {
    * ```
    */
   getLogs(params: CoinLogsParams): Promise<ApiResponse<PageResponse<CoinLog>>> {
-    if (isMockEnabled()) {
-      return mockCoinApi.getLogs(params)
-    }
     return http.get<PageResponse<CoinLog>>('/coin/logs', params, {
       showLoading: true,
       loadingText: '加载中...'
@@ -238,7 +213,7 @@ export const coinApi = {
  */
 export const uploadApi = {
   /**
-   * 上传图片
+   * 上传图片（Mock 实现，后端暂未提供）
    * @param filePath - 本地文件路径
    * @returns 上传后的图片 URL 和文件信息
    * 
@@ -249,34 +224,20 @@ export const uploadApi = {
    * ```
    */
   uploadImage(filePath: string): Promise<ApiResponse<UploadImageResponse>> {
-    if (isMockEnabled()) {
-      return mockUploadApi.uploadImage(filePath)
-    }
-
-    return new Promise((resolve, reject) => {
-      uni.uploadFile({
-        url: http.getBaseUrl() + '/upload/image',
-        filePath: filePath,
-        name: 'file',
-        header: {
-          'Authorization': `Bearer ${http.getToken()}`
-        },
-        success: (res) => {
-          if (res.statusCode === 200) {
-            try {
-              const result = JSON.parse(res.data) as ApiResponse<UploadImageResponse>
-              resolve(result)
-            } catch (error) {
-              reject(new Error('解析响应失败'))
-            }
-          } else {
-            reject(new Error(`上传失败: ${res.statusCode}`))
+    // 后端暂未提供上传头像接口,使用 Mock 实现
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          code: 200,
+          message: '上传成功',
+          data: {
+            url: `https://mock-avatar.example.com/${Date.now()}.jpg`,
+            filename: filePath.split('/').pop() || 'avatar.jpg',
+            size: 102400,
+            mimeType: 'image/jpeg'
           }
-        },
-        fail: (error) => {
-          reject(error)
-        }
-      })
+        })
+      }, 800)
     })
   }
 }
