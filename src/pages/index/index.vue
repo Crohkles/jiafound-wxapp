@@ -1,5 +1,11 @@
 <template>
   <view class="container">
+    <!-- 开发环境 Mock 测试入口 -->
+    <view v-if="showMockEntry" class="mock-entry" @click="goMockTest">
+      <text class="mock-icon">🎭</text>
+      <text class="mock-text">Mock 测试</text>
+    </view>
+
     <view class="search-section">
       <uni-search-bar 
         placeholder="搜索嘉定校区失物..." 
@@ -54,9 +60,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const title = ref('嘉园拾遗')
+
+// 仅在开发环境且启用 Mock 时显示测试入口
+const showMockEntry = computed(() => {
+  const mockEnabled = import.meta.env.VITE_ENABLE_MOCK
+  // 环境变量是字符串类型，需要判断是否为 'true'
+  return import.meta.env.DEV && mockEnabled === 'true'
+})
 
 const onSearch = (res: any) => {
   console.log('搜索内容：', res.value)
@@ -65,6 +78,12 @@ const onSearch = (res: any) => {
 const goPublish = () => {
   uni.showToast({ title: '去发布页面', icon: 'none' })
 }
+
+const goMockTest = () => {
+  uni.navigateTo({
+    url: '/pages/test/mock/index'
+  })
+}
 </script>
 
 <style lang="scss">
@@ -72,6 +91,36 @@ const goPublish = () => {
   padding: 10px;
   background-color: #f8f8f8;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Mock 测试入口 */
+.mock-entry {
+  position: fixed;
+  top: 20rpx;
+  right: 20rpx;
+  z-index: 999;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 16rpx 28rpx;
+  border-radius: 50rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.4);
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  .mock-icon {
+    font-size: 28rpx;
+  }
+
+  .mock-text {
+    font-size: 24rpx;
+    color: #ffffff;
+    font-weight: bold;
+  }
 }
 
 .search-section {
