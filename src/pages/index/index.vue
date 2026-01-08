@@ -1,82 +1,71 @@
 <template>
   <view class="container">
-    <!-- 开发环境 Mock 测试入口 -->
-    <view v-if="showMockEntry" class="mock-entry" @click="goMockTest">
-      <text class="mock-icon">🎭</text>
-      <text class="mock-text">Mock 测试</text>
+    <view class="header">
+      <text class="title">嘉园失物招领</text>
+      <text class="subtitle">AI 智能匹配，让温暖不再迷路</text>
     </view>
 
-    <view class="search-section">
-      <uni-search-bar 
-        placeholder="搜索嘉定校区失物..." 
-        @confirm="onSearch" 
-        border-radius="20"
-      />
+    <view class="main-buttons">
+      <view class="btn-box lost" @tap="goPublish('LOST')">
+        <view class="icon-circle">🔍</view>
+        <text class="btn-text">寻找失物</text>
+        <text class="btn-desc">发布寻物启事</text>
+      </view>
+      <view class="btn-box found" @tap="goPublish('FOUND')">
+        <view class="icon-circle">🎁</view>
+        <text class="btn-text">拾到物品</text>
+        <text class="btn-desc">发布招领信息</text>
+      </view>
     </view>
 
-    <view class="stat-card">
-      <uni-grid :column="2" :show-border="false" :square="false">
-        <uni-grid-item>
-          <view class="stat-item">
-            <text class="stat-num">12</text>
-            <text class="stat-label">今日拾取</text>
-          </view>
-        </uni-grid-item>
-        <uni-grid-item>
-          <view class="stat-item">
-            <text class="stat-num">5</text>
-            <text class="stat-label">寻物启事</text>
-          </view>
-        </uni-grid-item>
-      </uni-grid>
+    <view class="map-entry" @tap="goMap">
+      <view class="map-card">
+        <view class="map-info">
+          <text class="map-title">📍 地图模式</text>
+          <text class="map-desc">查看周边待领或寻找中的物品</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
     </view>
 
-    <view class="list-section">
-      <uni-section title="嘉园最新动态" type="line">
-        <uni-list>
-          <uni-list-item 
-            title="黑色遮阳伞" 
-            note="拾取地点：通嘉楼 3 楼" 
-            thumb="https://via.placeholder.com/100" 
-            thumb-size="lg"
-            rightText="刚刚"
-          />
-          <uni-list-item 
-            title="同济学生卡 (张*强)" 
-            note="拾取地点：嘉定校区食堂二楼" 
-            thumb="https://via.placeholder.com/100" 
-            thumb-size="lg"
-            rightText="15分钟前"
-          />
-        </uni-list>
-      </uni-section>
+    <view class="module-section">
+      <view class="module-card latest" @tap="goList('latest')">
+        <view class="module-content">
+          <text class="module-title">最新动态</text>
+          <text class="module-desc">最新丢失与招领</text>
+        </view>
+        <view class="module-icon">🆕</view>
+      </view>
+      
+      <view class="module-card urgent" @tap="goList('urgent')">
+        <view class="module-content">
+          <text class="module-title">30天未领</text>
+          <text class="module-desc">紧急寻找失主/主</text>
+        </view>
+        <view class="module-icon">⚠️</view>
+      </view>
     </view>
-
-    <button class="fab-btn" @click="goPublish">
-      <uni-icons type="plusempty" size="25" color="#fff"></uni-icons>
-      <text>发布</text>
-    </button>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-
-const title = ref('嘉园拾遗')
-
-// 仅在开发环境且启用 Mock 时显示测试入口
-const showMockEntry = computed(() => {
-  const mockEnabled = import.meta.env.VITE_ENABLE_MOCK
-  // 环境变量是字符串类型，需要判断是否为 'true'
-  return import.meta.env.DEV && mockEnabled === 'true'
-})
-
-const onSearch = (res: any) => {
-  console.log('搜索内容：', res.value)
+const goPublish = (type: string) => {
+  uni.navigateTo({
+    url: `/pages/publish/publish?type=${type}`
+  })
 }
 
-const goPublish = () => {
-  uni.showToast({ title: '去发布页面', icon: 'none' })
+const goMap = () => {
+  uni.navigateTo({
+    url: '/pages/map/map'
+  })
+}
+
+// 跳转到列表页，携带 type 参数区分模块
+const goList = (mode: string) => {
+  uni.navigateTo({
+    url: `/pages/list/list?mode=${mode}`
+  })
 }
 
 const goMockTest = () => {
@@ -86,96 +75,71 @@ const goMockTest = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
-  padding: 10px;
-  background-color: #f8f8f8;
+  padding: 40rpx;
+  background-color: #f8f9fa;
   min-height: 100vh;
-  position: relative;
+  .header {
+    margin-bottom: 60rpx;
+    .title { font-size: 48rpx; font-weight: bold; color: #333; display: block; }
+    .subtitle { font-size: 26rpx; color: #999; margin-top: 10rpx; display: block; }
+  }
+  .main-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40rpx;
+    .btn-box {
+      width: 46%;
+      height: 320rpx;
+      border-radius: 30rpx;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.05);
+      &.lost { background: #fff1f0; border: 1px solid #ffccc7; }
+      &.found { background: #e6f7ff; border: 1px solid #91d5ff; }
+    }
+    .icon-circle {
+      width: 100rpx; height: 100rpx; border-radius: 50%; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 50rpx; margin-bottom: 20rpx;
+    }
+    .btn-text { font-size: 34rpx; font-weight: bold; color: #333; }
+    .btn-desc { font-size: 22rpx; color: #888; margin-top: 8rpx; }
+  }
+  .map-card {
+    background: #fff; padding: 40rpx; border-radius: 24rpx;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.04);
+    .map-title { font-size: 30rpx; font-weight: bold; color: #444; display: block; }
+    .map-desc { font-size: 24rpx; color: #999; margin-top: 6rpx; }
+    .arrow { color: #ccc; }
+  }
 }
 
-/* Mock 测试入口 */
-.mock-entry {
-  position: fixed;
-  top: 20rpx;
-  right: 20rpx;
-  z-index: 999;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 16rpx 28rpx;
-  border-radius: 50rpx;
+.module-section {
   display: flex;
-  align-items: center;
-  gap: 8rpx;
-  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.4);
-
-  &:active {
-    opacity: 0.8;
-  }
-
-  .mock-icon {
-    font-size: 28rpx;
-  }
-
-  .mock-text {
-    font-size: 24rpx;
-    color: #ffffff;
-    font-weight: bold;
-  }
-}
-
-.search-section {
-  margin-bottom: 10px;
-}
-
-.stat-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 15px 0;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  margin-top: 30rpx;
   
-  .stat-num {
-    font-size: 40rpx;
-    font-weight: bold;
-    color: #007aff; // 同济大学常用的蓝色调
+  .module-card {
+    width: 44%;
+    padding: 30rpx 20rpx;
+    border-radius: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    background: #ffffff;
+    
+    &.latest { border-left: 8rpx solid #52c41a; }
+    &.urgent { border-left: 8rpx solid #faad14; }
+    
+    .module-title { font-size: 28rpx; font-weight: bold; color: #333; display: block; }
+    .module-desc { font-size: 20rpx; color: #999; margin-top: 8rpx; display: block; }
+    .module-icon { font-size: 40rpx; }
   }
-  
-  .stat-label {
-    font-size: 24rpx;
-    color: #666;
-    margin-top: 4px;
-  }
-}
-
-.fab-btn {
-  position: fixed;
-  bottom: 40px;
-  right: 20px;
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 50rpx;
-  background-color: #007aff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,122,255,0.4);
-  
-  text {
-    font-size: 20rpx;
-    color: #fff;
-    margin-top: -4px;
-  }
-}
-
-// 隐藏原生按钮默认边框
-.fab-btn::after {
-  border: none;
 }
 </style>

@@ -13,10 +13,16 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "嘉园拾遗"
 			}		
 		},
 
+		{
+			"path": "pages/hall/hall",
+			"style": {
+			"navigationBarTitleText": "拾遗广场"
+			}
+		},
 		
 		// 个人中心
 		{
@@ -71,31 +77,42 @@
 			}
 		},
 		
-	// 流水明细
-	{
-		"path": "pages/user/wallet/logs",
-		"style": {
-			"navigationBarTitleText": "流水明细",
-			"navigationBarBackgroundColor": "#ffffff",
-			"navigationBarTextStyle": "black"
-		}
-	},
+		// 流水明细
+		{
+			"path": "pages/user/wallet/logs",
+			"style": {
+				"navigationBarTitleText": "流水明细",
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationBarTextStyle": "black"
+			}
+		},
 	
-		}
+
+		{ "path": "pages/publish/publish" },
+
+    	{ "path": "pages/map/map" },
+
+		{ "path": "pages/list/list" }
 	],
 	
 	// TabBar 配置
 	"tabBar": {
 		"color": "#7A7E83",
-		"selectedColor": "#667eea",
-		"borderStyle": "white",
+		"selectedColor": "#007aff",
+		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
 			{
-				"pagePath": "pages/index/index",
-				"iconPath": "static/tabbar/home.png",
-				"selectedIconPath": "static/tabbar/home-active.png",
-				"text": "首页"
+			"pagePath": "pages/index/index",
+			"text": "首页",
+			"iconPath": "static/tabbar/home.png",
+			"selectedIconPath": "static/tabbar/home-active.png"
+			},
+			{
+			"pagePath": "pages/hall/hall",
+			"text": "广场",
+			"iconPath": "static/tabbar/hall.png",
+			"selectedIconPath": "static/tabbar/hall-active.png"
 			},
 			{
 				"pagePath": "pages/user/profile/index",
@@ -111,5 +128,11 @@
 		"navigationBarTitleText": "校园失物招领",
 		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#f5f5f5"
+	},
+
+	"permission": {
+		"scope.userLocation": {
+		"desc": "你的位置将用于在地图上展示周边的失物招领信息"
+		}
 	}
 }
