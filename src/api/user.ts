@@ -15,8 +15,7 @@ import type {
   CoinLogsParams,
   UserInfo,
   CoinLog,
-  PageResponse,
-  UploadImageResponse
+  PageResponse
 } from '@/types/user'
 
 /**
@@ -213,31 +212,47 @@ export const coinApi = {
  */
 export const uploadApi = {
   /**
-   * 上传图片（Mock 实现，后端暂未提供）
+   * 上传用户头像
    * @param filePath - 本地文件路径
-   * @returns 上传后的图片 URL 和文件信息
+   * @returns 上传后的图片 URL
    * 
    * @example
    * ```ts
    * const res = await uploadApi.uploadImage(tempFilePath)
-   * console.log(res.data.url) // 图片访问地址
+   * console.log(res.data) // 图片访问地址
    * ```
    */
-  uploadImage(filePath: string): Promise<ApiResponse<UploadImageResponse>> {
-    // 后端暂未提供上传头像接口,使用 Mock 实现
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          code: 200,
-          message: '上传成功',
-          data: {
-            url: `https://mock-avatar.example.com/${Date.now()}.jpg`,
-            filename: filePath.split('/').pop() || 'avatar.jpg',
-            size: 102400,
-            mimeType: 'image/jpeg'
+  uploadImage(filePath: string): Promise<ApiResponse<string>> {
+    return new Promise((resolve, reject) => {
+      const token = http.getToken()
+      
+      uni.uploadFile({
+        url: `${http.getBaseUrl()}/user/avatar/upload`,
+        filePath: filePath,
+        name: 'file',
+        header: {
+          'Authorization': `Bearer ${token}`
+        },
+        success: (uploadRes) => {
+          try {
+            // 解析返回的 JSON 数据
+            const response = JSON.parse(uploadRes.data) as ApiResponse<string>
+            
+            if (response.code === 200) {
+              resolve(response)
+            } else {
+              reject(new Error(response.message || '上传失败'))
+            }
+          } catch (error) {
+            console.error('解析上传响应失败:', error)
+            reject(new Error('上传失败'))
           }
-        })
-      }, 800)
+        },
+        fail: (error) => {
+          console.error('上传文件失败:', error)
+          reject(new Error(error.errMsg || '上传失败'))
+        }
+      })
     })
   }
 }

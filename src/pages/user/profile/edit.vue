@@ -169,8 +169,8 @@ const handleChooseAvatar = () => {
         const result = await uploadApi.uploadImage(tempFilePath)
         
         if (result.code === 200 && result.data) {
-          // 更新头像 URL
-          formData.value.avatarUrl = result.data.url
+          // 更新头像 URL（后端直接返回URL字符串）
+          formData.value.avatarUrl = result.data
           
           uni.showToast({
             title: '头像上传成功',
