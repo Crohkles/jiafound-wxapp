@@ -150,7 +150,7 @@ export interface BindParams {
 /** 修改信息请求参数 */
 export interface UpdateProfileParams {
   /** 昵称（可选） */
-  nickName?: string
+  nickname?: string
   /** 头像URL（可选） */
   avatarUrl?: string
   /** 邮箱（可选） */

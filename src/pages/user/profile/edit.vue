@@ -25,7 +25,7 @@
         </view>
         <input 
           class="item-input" 
-          v-model="formData.nickName" 
+          v-model="formData.nickname" 
           placeholder="请输入昵称"
           maxlength="20"
         />
@@ -110,7 +110,7 @@ const userStore = useUserStore()
 /** 表单数据 */
 const formData = ref({
   avatarUrl: '',
-  nickName: '',
+  nickname: '',
   email: '',
   verifyCode: ''
 })
@@ -139,7 +139,7 @@ onMounted(() => {
     // 深拷贝用户信息
     formData.value = {
       avatarUrl: userStore.userInfo.avatarUrl || '',
-      nickName: userStore.userInfo.nickname || '',
+      nickname: userStore.userInfo.nickname || '',
       email: userStore.userInfo.email || '',
       verifyCode: ''
     }
@@ -246,7 +246,7 @@ const handleSendCode = async () => {
  */
 const handleSave = async () => {
   // 校验昵称
-  if (!formData.value.nickName.trim()) {
+  if (!formData.value.nickname.trim()) {
     uni.showToast({
       title: '请输入昵称',
       icon: 'none'
@@ -265,7 +265,7 @@ const handleSave = async () => {
 
   // 构建更新参数
   const updateParams: UpdateProfileParams = {
-    nickName: formData.value.nickName,
+    nickname: formData.value.nickname,
     avatarUrl: formData.value.avatarUrl
   }
 

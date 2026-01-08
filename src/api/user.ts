@@ -113,12 +113,12 @@ export const userApi = {
   /**
    * 修改个人信息
    * @param params - 要修改的信息（支持部分更新）
-   * @returns 更新后的用户信息
+   * @returns 更新结果
    * 
    * @example
    * ```ts
    * // 仅修改昵称
-   * await userApi.updateProfile({ nickName: '新昵称' })
+   * await userApi.updateProfile({ nickname: '新昵称' })
    * 
    * // 修改邮箱（需要验证码）
    * await userApi.updateProfile({
@@ -128,13 +128,13 @@ export const userApi = {
    * 
    * // 同时修改多个字段
    * await userApi.updateProfile({
-   *   nickName: '新昵称',
+   *   nickname: '新昵称',
    *   avatarUrl: 'https://...'
    * })
    * ```
    */
-  updateProfile(params: UpdateProfileParams): Promise<ApiResponse<UserInfo>> {
-    return http.put<UserInfo>('/user/profile', params, {
+  updateProfile(params: UpdateProfileParams): Promise<ApiResponse<void>> {
+    return http.put<void>('/user/profile', params, {
       showLoading: true,
       loadingText: '更新中...'
     })
