@@ -24,7 +24,7 @@
           <text class="map-title">📍 地图模式</text>
           <text class="map-desc">查看周边待领或寻找中的物品</text>
         </view>
-        <text class="arrow">></text>
+        <uni-icons type="right" size="20" color="#ccc"></uni-icons>
       </view>
     </view>
 
