@@ -77,6 +77,28 @@
 
     <!-- 功能列表 -->
     <view class="menu-list">
+      <view 
+        v-if="userStore.userInfo?.roleType === 'Admin'" 
+        class="menu-item admin-menu" 
+        @click="handleNavigation('/pages/dispute/myDisputes')"
+      >
+        <view class="menu-left">
+          <text class="menu-icon">🛡️</text>
+          <text class="menu-text admin-text">纠纷处理</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view 
+        v-if="userStore.userInfo?.roleType === 'Admin'" 
+        class="menu-item admin-menu" 
+        @click="handleNavigation('/pages/admin/audit/audit')"
+      >
+        <view class="menu-left">
+          <text class="menu-icon">🛡️</text>
+          <text class="menu-text admin-text">内容审核</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
       <!-- 我的发布 -->
       <view class="menu-item" @click="handleNavigation('/pages/item/my-post/index')">
         <view class="menu-left">
@@ -144,6 +166,7 @@ onMounted(async () => {
       console.error('刷新用户信息失败:', error)
     }
   }
+  console.log('用户信息:', userStore.userInfo)
 })
 
 // 将“我的发布”跳转逻辑修改为：
