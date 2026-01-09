@@ -56,6 +56,7 @@
   import { ref, reactive, onMounted } from 'vue'
   import { onLoad } from '@dcloudio/uni-app'
   import { useUserStore } from '@/stores/user'
+  import { userApi } from '@/api/user'
 
   const userStore = useUserStore()
   const isLost = ref(true)
@@ -178,29 +179,22 @@ const getLocation = () => {
   const matchResults = ref([]); // 定义响应式数组
 
   // 获取用户赏币余额
-  const fetchUserBalance = () => {
+  const fetchUserBalance = async () => {
     // 检查是否已登录
     if (!userStore.token) {
       uni.showToast({ title: '请先登录', icon: 'none' })
       return
     }
 
-    uni.request({
-      url: 'http://localhost:8085/user/profile',
-      method: 'GET',
-      header: {
-        'Authorization': `Bearer ${userStore.token}`
-      },
-      success: (res) => {
-        if (res.data.code === 200 && res.data.data) {
-          userBalance.value = res.data.data.coinBalance || 0
-        }
-      },
-      fail: (err) => {
-        console.error('获取余额失败:', err)
-        uni.showToast({ title: '获取余额失败', icon: 'none' })
+    try {
+      const res = await userApi.getProfile()
+      if (res.data) {
+        userBalance.value = res.data.coinBalance || 0
       }
-    })
+    } catch (error) {
+      console.error('获取余额失败:', error)
+      uni.showToast({ title: '获取余额失败', icon: 'none' })
+    }
   }
 
   const handleSubmit = async () => {

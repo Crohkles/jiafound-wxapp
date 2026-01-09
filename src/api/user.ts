@@ -36,7 +36,7 @@ export const authApi = {
    * ```
    */
   login(params: LoginParams): Promise<ApiResponse<LoginResponse>> {
-    return http.post<LoginResponse>('/user/login', params, {
+    return http.post<LoginResponse>('/api/v1/user/login', params, {
       showLoading: true,
       loadingText: '登录中...'
     })
@@ -58,7 +58,7 @@ export const authApi = {
    * ```
    */
   bind(params: BindParams): Promise<ApiResponse<void>> {
-    return http.post<void>('/user/bind', params, {
+    return http.post<void>('/api/v1/user/bind', params, {
       showLoading: true,
       loadingText: '认证中...'
     })
@@ -85,7 +85,7 @@ export const authApi = {
    * ```
    */
   sendCode(params: SendCodeParams): Promise<ApiResponse<void>> {
-    return http.post<void>('/auth/send-code', params, {
+    return http.post<void>('/api/v1/auth/send-code', params, {
       showLoading: true,
       loadingText: '发送中...'
     })
@@ -107,7 +107,7 @@ export const userApi = {
    * ```
    */
   getProfile(): Promise<ApiResponse<UserInfo>> {
-    return http.get<UserInfo>('/user/profile')
+    return http.get<UserInfo>('/api/v1/user/profile')
   },
 
   /**
@@ -134,7 +134,7 @@ export const userApi = {
    * ```
    */
   updateProfile(params: UpdateProfileParams): Promise<ApiResponse<void>> {
-    return http.put<void>('/user/profile', params, {
+    return http.put<void>('/api/v1/user/profile', params, {
       showLoading: true,
       loadingText: '更新中...'
     })
@@ -157,7 +157,7 @@ export const coinApi = {
    * ```
    */
   recharge(params: RechargeParams): Promise<ApiResponse<void>> {
-    return http.post<void>('/coin/recharge', params, {
+    return http.post<void>('/api/v1/coin/recharge', params, {
       showLoading: true,
       loadingText: '充值中...'
     })
@@ -175,7 +175,7 @@ export const coinApi = {
    * ```
    */
   withdraw(params: WithdrawParams): Promise<ApiResponse<void>> {
-    return http.post<void>('/coin/withdraw', params, {
+    return http.post<void>('/api/v1/coin/withdraw', params, {
       showLoading: true,
       loadingText: '提现中...'
     })
@@ -200,7 +200,7 @@ export const coinApi = {
    * ```
    */
   getLogs(params: CoinLogsParams): Promise<ApiResponse<PageResponse<CoinLog>>> {
-    return http.get<PageResponse<CoinLog>>('/coin/logs', params, {
+    return http.get<PageResponse<CoinLog>>('/api/v1/coin/logs', params, {
       showLoading: true,
       loadingText: '加载中...'
     })
@@ -227,7 +227,7 @@ export const uploadApi = {
       const token = http.getToken()
       
       uni.uploadFile({
-        url: `${http.getBaseUrl()}/user/avatar/upload`,
+        url: `${http.getBaseUrl()}/api/v1/user/avatar/upload`,
         filePath: filePath,
         name: 'file',
         header: {
