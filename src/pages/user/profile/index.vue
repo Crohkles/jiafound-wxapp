@@ -83,7 +83,7 @@
         @click="handleNavigation('/pages/admin/dispute/dispute')"
       >
         <view class="menu-left">
-          <text class="menu-icon">🛡️</text>
+          <text class="menu-icon">⚖️</text>
           <text class="menu-text admin-text">纠纷处理</text>
         </view>
         <text class="menu-arrow">›</text>
@@ -94,7 +94,7 @@
         @click="handleNavigation('/pages/admin/audit/audit')"
       >
         <view class="menu-left">
-          <text class="menu-icon">🛡️</text>
+          <text class="menu-icon">🔍</text>
           <text class="menu-text admin-text">内容审核</text>
         </view>
         <text class="menu-arrow">›</text>
@@ -113,6 +113,15 @@
         <view class="menu-left">
           <text class="menu-icon">🎯</text>
           <text class="menu-text">我的认领</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+
+      <!-- 我的纠纷 -->
+      <view class="menu-item" @click="handleNavigation('/pages/dispute/myDisputes')">
+        <view class="menu-left">
+          <text class="menu-icon">📋</text>
+          <text class="menu-text">我的纠纷</text>
         </view>
         <text class="menu-arrow">›</text>
       </view>
