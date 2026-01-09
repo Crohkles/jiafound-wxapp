@@ -20,9 +20,9 @@
         <input
           class="form-input"
           v-model="formData.realName"
-          placeholder="请输入真实姓名"
+          placeholder="请输入真实姓名(2-10个汉字)"
           placeholder-class="placeholder"
-          maxlength="20"
+          maxlength="10"
         />
       </view>
 
@@ -35,9 +35,10 @@
         <input
           class="form-input"
           v-model="formData.studentID"
-          placeholder="请输入学号"
+          type="number"
+          placeholder="请输入学号(7位数字)"
           placeholder-class="placeholder"
-          maxlength="20"
+          maxlength="7"
         />
       </view>
 
@@ -139,16 +140,19 @@ const validateForm = (): { valid: boolean; message: string } => {
   if (!formData.realName.trim()) {
     return { valid: false, message: '请输入真实姓名' }
   }
-  if (formData.realName.trim().length < 2) {
-    return { valid: false, message: '姓名至少2个字符' }
+  // 验证是否为2-10个汉字
+  const nameReg = /^[\u4e00-\u9fa5]{2,10}$/
+  if (!nameReg.test(formData.realName.trim())) {
+    return { valid: false, message: '姓名应为2-10个汉字' }
   }
 
   // 学号验证
   if (!formData.studentID.trim()) {
     return { valid: false, message: '请输入学号' }
   }
-  if (!/^[A-Za-z0-9]+$/.test(formData.studentID)) {
-    return { valid: false, message: '学号格式不正确' }
+  // 验证是否为7位数字
+  if (!/^[0-9]{7}$/.test(formData.studentID.trim())) {
+    return { valid: false, message: '学号应为7位数字' }
   }
 
   // 邮箱验证
@@ -257,9 +261,10 @@ const handleSubmit = async () => {
     })
     return
   }
-  if (formData.verifyCode.length !== 6) {
+  // 验证是否为6位数字
+  if (!/^[0-9]{6}$/.test(formData.verifyCode.trim())) {
     uni.showToast({
-      title: '验证码为6位数字',
+      title: '验证码应为6位数字',
       icon: 'none',
       duration: 2000
     })
