@@ -129,7 +129,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { coinApi } from '@/api/user'
 import { useUserStore } from '@/stores/user'
 import type { CoinLog } from '@/types/user'
@@ -363,8 +364,17 @@ const formatTime = (time: string): string => {
   return `${date.getMonth() + 1}-${date.getDate()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
-// 页面加载
-onMounted(async () => {
+/**
+ * 页面显示时刷新数据
+ */
+onShow(async () => {
+  // 刷新用户信息（余额）
+  if (userStore.isLoggedIn) {
+    await userStore.refreshUserInfo().catch(error => {
+      console.error('刷新用户信息失败:', error)
+    })
+  }
+  // 刷新流水记录
   await fetchLogs()
 })
 </script>

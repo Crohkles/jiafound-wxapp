@@ -114,7 +114,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
@@ -133,16 +134,13 @@ const maskStudentId = computed(() => {
 })
 
 /**
- * 页面加载时检查登录状态
+ * 页面显示时刷新用户信息（包括余额）
  */
-onMounted(async () => {
+onShow(() => {
   if (userStore.isLoggedIn) {
-    try {
-      // 刷新用户信息
-      await userStore.refreshUserInfo()
-    } catch (error) {
+    userStore.refreshUserInfo().catch(error => {
       console.error('刷新用户信息失败:', error)
-    }
+    })
   }
 })
 
