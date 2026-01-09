@@ -29,7 +29,7 @@
                   <text class="label">发布者:</text>
                   <text class="value">{{ item.publisherNickname }}</text>
                 </view>
-                <view class="info-row description">
+                <view class="info-row">
                   <text class="label">描述:</text>
                   <text class="value">{{ item.description }}</text>
                 </view>
@@ -290,15 +290,6 @@ onMounted(() => {
       
       &:last-child {
         margin-bottom: 0;
-      }
-      
-      &.description {
-        flex-direction: column;
-        
-        .value {
-          margin-top: 10rpx;
-          line-height: 1.6;
-        }
       }
       
       .label {
