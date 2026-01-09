@@ -1,17 +1,5 @@
 <template>
   <view class="my-disputes-container">
-    <!-- 筛选标签 -->
-    <view class="filter-tabs">
-      <view 
-        v-for="tab in tabs" 
-        :key="tab.value"
-        :class="['tab-item', { active: currentTab === tab.value }]"
-        @click="switchTab(tab.value)"
-      >
-        {{ tab.label }}
-      </view>
-    </view>
-
     <!-- 列表内容 -->
     <scroll-view 
       scroll-y 
@@ -112,13 +100,6 @@ interface ApiResponse {
   }
 }
 
-const tabs = [
-  { label: '全部', value: 'all' },
-  { label: '审核中', value: 'reviewing' },
-  { label: '已完成', value: 'completed' }
-]
-
-const currentTab = ref('all')
 const disputeList = ref<DisputeItem[]>([])
 const pageNum = ref(1)
 const pageSize = ref(10)
@@ -131,15 +112,6 @@ const refreshing = ref(false)
 onMounted(() => {
   loadDisputeList()
 })
-
-// 切换标签
-const switchTab = (tab: string) => {
-  currentTab.value = tab
-  pageNum.value = 1
-  disputeList.value = []
-  hasMore.value = true
-  loadDisputeList()
-}
 
 // 加载列表
 const loadDisputeList = async () => {
@@ -205,8 +177,9 @@ const onRefresh = () => {
 
 // 查看详情
 const viewDetail = (item: DisputeItem) => {
+  const isInitiator = item.relationType === 'Initiated by Me'
   uni.navigateTo({
-    url: `/pages/dispute/disputeDetail?ticketId=${item.ticketId}`
+    url: `/pages/dispute/disputeDetails?ticketId=${item.ticketId}&isInitiator=${isInitiator}`
   })
 }
 
@@ -239,7 +212,8 @@ const getStatusClass = (status: string) => {
     'Reviewing': 'reviewing',
     'Completed': 'completed',
     'Rejected': 'rejected',
-    'Processing': 'processing'
+    'Processing': 'processing',
+    'Revoked': 'revoked'
   }
   return classMap[status] || ''
 }
@@ -251,27 +225,6 @@ const getStatusClass = (status: string) => {
   background-color: #f8f8f8;
   display: flex;
   flex-direction: column;
-}
-
-.filter-tabs {
-  display: flex;
-  background-color: #fff;
-  padding: 20rpx 30rpx;
-  gap: 30rpx;
-  
-  .tab-item {
-    padding: 10rpx 30rpx;
-    font-size: 28rpx;
-    color: #666;
-    border-radius: 30rpx;
-    transition: all 0.3s;
-    
-    &.active {
-      background-color: #007aff;
-      color: #fff;
-      font-weight: bold;
-    }
-  }
 }
 
 .dispute-list {
@@ -335,6 +288,11 @@ const getStatusClass = (status: string) => {
           &.processing {
             background-color: #e3f2fd;
             color: #2196f3;
+          }
+          
+          &.revoked {
+            background-color: #f5f5f5;
+            color: #999;
           }
         }
       }

@@ -7,18 +7,19 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		
 		{
-			"path": "pages/dispute/disputeDetail",
+			"path": "pages/dispute/myDisputes",
 			"style": {
-				"navigationBarTitleText": "维权详情",
+				"navigationBarTitleText": "维权列表",
 				"navigationBarBackgroundColor": "#ffffff",
 				"navigationBarTextStyle": "black"
 			}
 		},
 		{
-			"path": "pages/dispute/myDisputes",
+			"path": "pages/dispute/disputeDetails",
 			"style": {
-				"navigationBarTitleText": "维权列表",
+				"navigationBarTitleText": "维权详情",
 				"navigationBarBackgroundColor": "#ffffff",
 				"navigationBarTextStyle": "black"
 			}
